@@ -1,0 +1,148 @@
+﻿<Window x:Class="TextEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TextEditor"
+        mc:Ignorable="d"
+        Title="{Binding FileName}" Height="500" Width="850" 
+        Icon="Icons\Icon.png"
+        Language="en-US">
+
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+N"
+            Command="{Binding New}"
+            CommandParameter="{Binding ElementName=txtEditor, Path=Document}"/>
+        <KeyBinding Gesture="Ctrl+O"
+            Command="{Binding Open}"
+            CommandParameter="{Binding ElementName=txtEditor, Path=Document}"/>
+        <KeyBinding Gesture="Ctrl+S"
+            Command="{Binding Save}"
+            CommandParameter="{Binding ElementName=txtEditor, Path=Document}"/>
+        <KeyBinding Gesture="Esc"
+            Command="{Binding Exit}"
+            CommandParameter="{Binding ElementName=txtEditor, Path=Document}"/>
+    </Window.InputBindings>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" FontSize="16">
+           
+            <MenuItem Header="Plik">
+                <MenuItem Header="Nowy" Command="{Binding New}" CommandParameter="{Binding ElementName=txtEditor, Path=Document}" InputGestureText="Ctrl+N"/>
+                <MenuItem Header="Otwórz" Command="{Binding Open}" CommandParameter="{Binding ElementName=txtEditor, Path=Document}" InputGestureText="Ctrl+O"/>
+                <MenuItem Header="Zapisz" Command="{Binding Save}" CommandParameter="{Binding ElementName=txtEditor, Path=Document}" InputGestureText="Ctrl+S"/>
+                <Separator/>
+                <MenuItem Header="Wyjdź" Command="{Binding Exit}" CommandParameter="{Binding ElementName=txtEditor, Path=Document}" InputGestureText="Esc"/>
+            </MenuItem>
+
+            <MenuItem Header="Edit">
+                <MenuItem Header="Undo" Command="Undo"/>
+                <MenuItem Header="Redo" Command="Redo"/>
+                <Separator/>
+                <MenuItem Header="Wytnij" Command="Cut"/>
+                <MenuItem Header="Kopiuj" Command="Copy"/>
+                <MenuItem Header="Wklej" Command="Paste"/>
+            </MenuItem>
+
+        </Menu>
+
+        <ToolBar DockPanel.Dock="Top">
+            <Separator/>
+            <Button Name="btnNew" Command="{Binding New}" CommandParameter="{Binding ElementName=txtEditor, Path=Document}">
+                <Image Source="Icons\New.png" Width="16" Height="16">
+                    <Image.ToolTip>
+                        <ToolTip Content="Otwórz nowy plik"/>
+                    </Image.ToolTip>
+                </Image>
+            </Button>
+
+            <Button Name="btnOpen" Command="{Binding Open}" CommandParameter="{Binding ElementName=txtEditor, Path=Document}">
+                <Image Source="Icons\Open.png" Width="16" Height="16">
+                    <Image.ToolTip>
+                        <ToolTip Content="Otwórz plik"/>
+                    </Image.ToolTip>
+                </Image>
+            </Button>
+
+            <Button Name="btnSave" Command="{Binding Save}" CommandParameter="{Binding ElementName=txtEditor, Path=Document}">
+                <Image Source="Icons\Save.png" Width="16" Height="16">
+                    <Image.ToolTip>
+                        <ToolTip Content="Zapisz plik"/>
+                    </Image.ToolTip>
+                </Image>
+            </Button>
+            <Separator/>
+            <ToggleButton Name="btnBold" Command="EditingCommands.ToggleBold">
+                <Image Source="Icons\Bold.png" Height="16" Width="16">
+                    <Image.ToolTip>
+                        <ToolTip Content="Pogrubienie"/>
+                    </Image.ToolTip>
+                </Image>
+            </ToggleButton>
+
+            <ToggleButton Name="btnItalic" Command="EditingCommands.ToggleItalic">
+                <Image Source="Icons\Italic.png" Height="16" Width="16">
+                    <Image.ToolTip>
+                        <ToolTip Content="Pochylenie"/>
+                    </Image.ToolTip>
+                </Image>
+            </ToggleButton>
+
+            <ToggleButton Name="btnUnderline" Command="EditingCommands.ToggleUnderline">
+                <Image Source="Icons\Underline.png" Height="16" Width="16">
+                    <Image.ToolTip>
+                        <ToolTip Content="Podkreślenie"/>
+                    </Image.ToolTip>
+                </Image>
+            </ToggleButton>
+            <Separator/>
+
+            <Button Name="btnAlignLeft" Command="EditingCommands.AlignLeft">
+                <Image Source="Icons\AlignLeft.png" Width="16" Height="16">
+                    <Image.ToolTip>
+                        <ToolTip Content="Wyrównaj tekst do lewej"/>
+                    </Image.ToolTip>
+                </Image>
+            </Button>
+
+            <Button Name="btnAlignCenter" Command="EditingCommands.AlignCenter">
+                <Image Source="Icons\AlignCenter.png" Width="16" Height="16">
+                    <Image.ToolTip>
+                        <ToolTip Content="Wyśrodkuj"/>
+                    </Image.ToolTip>
+                </Image>
+            </Button>
+
+            <Button Name="btnAlignRight" Command="EditingCommands.AlignRight">
+                <Image Source="Icons\AlignRight.png" Width="16" Height="16">
+                    <Image.ToolTip>
+                        <ToolTip Content="Wyrównaj tekst do prawej"/>
+                    </Image.ToolTip>
+                </Image>
+            </Button>
+
+            <Separator/>
+            <ComboBox Name="cmbFontFamily" Width="150" ItemsSource="{Binding FontNames}" SelectedIndex="0" SelectionChanged="cmbFontFamily_SelectionChanged"/>
+            <ComboBox Name="cmbFontSize" Width="50" IsEditable="True" ItemsSource="{Binding FontSize}" SelectedIndex="4" TextBoxBase.TextChanged="cmbFontSize_TextChanged"/>
+
+            <Separator/>
+        </ToolBar>
+
+        <RichTextBox Name="txtEditor"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     SelectionChanged="txtEditor_SelectionChanged"
+                     FontFamily="Arial"
+                     FontSize="12"
+                     AcceptsTab="True"
+                     Padding="15"
+                     >
+            
+            <FlowDocument Name="txtFlow" Block.LineHeight="1"  >
+                
+            </FlowDocument>
+            
+        </RichTextBox>
+   
+    </DockPanel>
+</Window>
